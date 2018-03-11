@@ -10,11 +10,11 @@ class Card extends PaymentMethod
     public function parametersValidationRules()
     {
         return [
-            'full_name' => 'required',
-            'number' => 'required',
-            'expiration_month' => 'required',
-            'expiration_year' => 'required',
-            'verification_value' => 'required',
+            'full_name' => 'required|string',
+            'number' => 'required|string',
+            'expiration_month' => 'required|string|size:2',
+            'expiration_year' => 'required|string|size:4',
+            'verification_value' => 'required|string|min:3|max:4',
         ];
     }
 }

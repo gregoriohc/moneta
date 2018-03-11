@@ -10,7 +10,7 @@ class Token extends PaymentMethod
     public function parametersValidationRules()
     {
         return [
-            'code' => 'required',
+            'code' => 'required|string',
         ];
     }
 }
