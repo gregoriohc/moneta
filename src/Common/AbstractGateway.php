@@ -103,15 +103,25 @@ abstract class AbstractGateway implements GatewayInterface, ArrayAccess, Iterato
     /**
      * Create and initialize a request object
      *
-     * @param string $class The request class name
+     * @param string $name The request name or class
      * @param array $parameters
      * @return \Gregoriohc\Moneta\Common\Messages\AbstractRequest
      */
-    protected function createRequest($class, $parameters = [])
+    protected function createRequest($name, $parameters = [])
     {
+        $requestClass = $name;
+        if (!str_contains($requestClass, '\\')) {
+            $requestClass = $this->requestClass($requestClass);
+        }
+
+        if (!class_exists($requestClass)) {
+            $gatewayClass = class_basename($this);
+            throw new \BadMethodCallException("Gateway '$gatewayClass' does not support '$name' method");
+        }
+
         $this->validateParameters();
 
-        return new $class($this, $parameters);
+        return new $requestClass($this, $parameters);
     }
 
     /**
@@ -123,6 +133,17 @@ abstract class AbstractGateway implements GatewayInterface, ArrayAccess, Iterato
         return substr(get_class($this), 0, -strlen(class_basename($this))) . 'Messages\\' . ucfirst($name) . 'Request';
     }
 
+    public function supports($name)
+    {
+        if (in_array($name, $this->requestMethods)) {
+            return method_exists($this, $name) || class_exists($this->requestClass($name));
+        } elseif (in_array($name, $this->webhookMethods)) {
+            return method_exists($this, $name);
+        }
+
+        return false;
+    }
+
     /**
      * @param string $name
      * @param $arguments
@@ -131,21 +152,12 @@ abstract class AbstractGateway implements GatewayInterface, ArrayAccess, Iterato
     public function __call($name, $arguments)
     {
         if (strpos($name, 'supports') === 0) {
-            $name = lcfirst(substr($name, 8));
-            if (in_array($name, $this->requestMethods)) {
-                return method_exists($this, $name) || class_exists($this->requestClass($name));
-            } elseif (in_array($name, $this->webhookMethods)) {
-                return method_exists($this, $name);
-            }
-        } elseif (in_array($name, $this->requestMethods)) {
-            $requestClass = $this->requestClass($name);
-            if (class_exists($requestClass)) {
-                $parameters = array_key_exists(0, $arguments) ? $arguments[0] : [];
-                return $this->createRequest($requestClass, $parameters);
-            } else {
-                $class = class_basename($this);
-                throw new \BadMethodCallException("Gateway '$class' does not support '$name' method");
-            }
+            return $this->supports(lcfirst(substr($name, 8)));
+        }
+
+        if (in_array($name, $this->requestMethods)) {
+            $parameters = array_key_exists(0, $arguments) ? $arguments[0] : [];
+            return $this->createRequest($name, $parameters);
         }
 
         $class = get_class($this);

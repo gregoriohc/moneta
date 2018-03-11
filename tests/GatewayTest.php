@@ -24,6 +24,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Fake', $gateway->name());
         $this->assertTrue($gateway->supportsCapture());
         $this->assertFalse($gateway->supportsAuthorize());
+        $this->assertFalse($gateway->supports('other'));
         $this->assertFalse($gateway->supportsAcceptNotification());
         $this->assertEquals([
             'test_mode' => true,
