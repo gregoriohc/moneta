@@ -38,4 +38,14 @@ class FakeRequest extends AbstractRequest
     {
         return $this->createResponse($data);
     }
+
+    /**
+     * Get the response class for this request
+     *
+     * @return string
+     */
+    public function responseClass()
+    {
+        return FakeResponse::class;
+    }
 }

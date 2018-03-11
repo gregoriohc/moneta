@@ -3,13 +3,12 @@
 namespace Gregoriohc\Moneta\Tests;
 
 use Gregoriohc\Moneta\Common\Exceptions\InvalidParametersException;
-use Gregoriohc\Moneta\Common\Messages\AbstractResponse;
-use Gregoriohc\Moneta\Common\Messages\BasicResponse;
 use Gregoriohc\Moneta\Common\Models\Card;
 use Gregoriohc\Moneta\Common\Models\Token;
 use Gregoriohc\Moneta\Moneta;
 use Gregoriohc\Moneta\Tests\Mocking\CaptureRequest;
 use Gregoriohc\Moneta\Tests\Mocking\FakeGateway;
+use Gregoriohc\Moneta\Tests\Mocking\FakeResponse;
 use RuntimeException;
 
 class CaptureRequestTest extends \PHPUnit\Framework\TestCase
@@ -43,9 +42,9 @@ class CaptureRequestTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->assertInstanceOf(CaptureRequest::class, $request);
 
-        /** @var AbstractResponse $response */
+        /** @var FakeResponse $response */
         $response = $request->send();
-        $this->assertInstanceOf(BasicResponse::class, $response);
+        $this->assertInstanceOf(FakeResponse::class, $response);
 
         $this->assertTrue($response->isSuccessful());
 
@@ -81,9 +80,9 @@ class CaptureRequestTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->assertInstanceOf(CaptureRequest::class, $request);
 
-        /** @var AbstractResponse $response */
+        /** @var FakeResponse $response */
         $response = $request->send();
-        $this->assertInstanceOf(BasicResponse::class, $response);
+        $this->assertInstanceOf(FakeResponse::class, $response);
 
         $responseData = $response->data();
         $this->assertEquals([
@@ -188,7 +187,7 @@ class CaptureRequestTest extends \PHPUnit\Framework\TestCase
         $request->send();
 
         $response = $request->response();
-        $this->assertInstanceOf(BasicResponse::class, $response);
+        $this->assertInstanceOf(FakeResponse::class, $response);
 
         $gateway = $request->gateway();
         $this->assertInstanceOf(FakeGateway::class, $gateway);

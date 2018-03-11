@@ -43,7 +43,9 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      */
     protected function createResponse($data)
     {
-        return $this->response = new BasicResponse($this, $data);
+        $responseClass = $this->responseClass();
+
+        return $this->response = new $responseClass($this, $data);
     }
 
     /**

@@ -1,8 +1,10 @@
 <?php
 
-namespace Gregoriohc\Moneta\Common\Messages;
+namespace Gregoriohc\Moneta\Tests\Mocking;
 
-class BasicResponse extends AbstractResponse
+use Gregoriohc\Moneta\Common\Messages\AbstractResponse;
+
+class FakeResponse extends AbstractResponse
 {
     /**
      * Is the response successful?

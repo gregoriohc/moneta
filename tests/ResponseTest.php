@@ -2,11 +2,11 @@
 
 namespace Gregoriohc\Moneta\Tests;
 
-use Gregoriohc\Moneta\Common\Messages\BasicResponse;
 use Gregoriohc\Moneta\Common\Models\Token;
 use Gregoriohc\Moneta\Moneta;
 use Gregoriohc\Moneta\Tests\Mocking\CaptureRequest;
 use Gregoriohc\Moneta\Tests\Mocking\FakeGateway;
+use Gregoriohc\Moneta\Tests\Mocking\FakeResponse;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,9 +29,9 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'currency' => 'USD',
         ]);
 
-        /** @var BasicResponse $response */
+        /** @var FakeResponse $response */
         $response = $request->send();
-        $this->assertInstanceOf(BasicResponse::class, $response);
+        $this->assertInstanceOf(FakeResponse::class, $response);
 
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isCancelled());
