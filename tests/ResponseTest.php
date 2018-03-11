@@ -4,9 +4,9 @@ namespace Gregoriohc\Moneta\Tests;
 
 use Gregoriohc\Moneta\Common\Models\Token;
 use Gregoriohc\Moneta\Moneta;
-use Gregoriohc\Moneta\Tests\Mocking\CaptureRequest;
+use Gregoriohc\Moneta\Tests\Mocking\Messages\CaptureRequest;
 use Gregoriohc\Moneta\Tests\Mocking\FakeGateway;
-use Gregoriohc\Moneta\Tests\Mocking\FakeResponse;
+use Gregoriohc\Moneta\Tests\Mocking\Messages\FakeResponse;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {

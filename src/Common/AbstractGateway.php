@@ -9,21 +9,34 @@ use JsonSerializable;
 
 /**
  * @method bool supportsAuthorize()
- * @method bool supportsCompleteAuthorize()
  * @method bool supportsCapture()
  * @method bool supportsPurchase()
- * @method bool supportsCompletePurchase()
  * @method bool supportsRefund()
  * @method bool supportsVoid()
- * @method bool supportsAcceptNotification()
  * @method bool supportsCreatePaymentMethod()
  * @method bool supportsDeletePaymentMethod()
  * @method bool supportsUpdatePaymentMethod()
+ * @method bool supportsAcceptNotification()
  * @property bool test_mode
  */
 abstract class AbstractGateway implements GatewayInterface, ArrayAccess, IteratorAggregate, JsonSerializable
 {
     use Parametrizable;
+
+    private $requestMethods = [
+        'authorize',
+        'capture',
+        'purchase',
+        'refund',
+        'void',
+        'createPaymentMethod',
+        'deletePaymentMethod',
+        'updatePaymentMethod',
+    ];
+
+    private $webhookMethods = [
+        'acceptNotification',
+    ];
 
     /**
      * @var mixed
@@ -103,6 +116,15 @@ abstract class AbstractGateway implements GatewayInterface, ArrayAccess, Iterato
 
     /**
      * @param string $name
+     * @return string
+     */
+    private function requestClass($name)
+    {
+        return substr(get_class($this), 0, -strlen(class_basename($this))) . 'Messages\\' . ucfirst($name) . 'Request';
+    }
+
+    /**
+     * @param string $name
      * @param $arguments
      * @return mixed
      */
@@ -110,10 +132,23 @@ abstract class AbstractGateway implements GatewayInterface, ArrayAccess, Iterato
     {
         if (strpos($name, 'supports') === 0) {
             $name = lcfirst(substr($name, 8));
-            return method_exists($this, $name);
+            if (in_array($name, $this->requestMethods)) {
+                return method_exists($this, $name) || class_exists($this->requestClass($name));
+            } elseif (in_array($name, $this->webhookMethods)) {
+                return method_exists($this, $name);
+            }
+        } elseif (in_array($name, $this->requestMethods)) {
+            $requestClass = $this->requestClass($name);
+            if (class_exists($requestClass)) {
+                $parameters = array_key_exists(0, $arguments) ? $arguments[0] : [];
+                return $this->createRequest($requestClass, $parameters);
+            } else {
+                $class = class_basename($this);
+                throw new \BadMethodCallException("Gateway '$class' does not support '$name' method");
+            }
         }
 
-        $class = self::class;
+        $class = get_class($this);
         throw new \BadMethodCallException("Method '$class::$name' does not exists");
     }
 }

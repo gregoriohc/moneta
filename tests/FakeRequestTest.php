@@ -5,7 +5,7 @@ namespace Gregoriohc\Moneta\Tests;
 use Gregoriohc\Moneta\Common\Exceptions\InvalidParametersException;
 use Gregoriohc\Moneta\Moneta;
 use Gregoriohc\Moneta\Tests\Mocking\FakeGateway;
-use Gregoriohc\Moneta\Tests\Mocking\FakeRequest;
+use Gregoriohc\Moneta\Tests\Mocking\Messages\FakeRequest;
 
 class FakeRequestTest extends \PHPUnit\Framework\TestCase
 {

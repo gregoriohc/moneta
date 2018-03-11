@@ -97,7 +97,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->expectException(\BadMethodCallException::class);
-        $this->expectExceptionMessage("Method 'Gregoriohc\Moneta\Common\AbstractGateway::authorize' does not exists");
+        $this->expectExceptionMessage("Gateway 'FakeGateway' does not support 'authorize' method");
 
         $gateway->authorize();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gregoriohc\Moneta\Tests\Mocking;
+namespace Gregoriohc\Moneta\Tests\Mocking\Messages;
 
 use Gregoriohc\Moneta\Common\Messages\AbstractRequest;
 use Gregoriohc\Moneta\Common\Messages\ResponseInterface;

@@ -6,9 +6,9 @@ use Gregoriohc\Moneta\Common\Exceptions\InvalidParametersException;
 use Gregoriohc\Moneta\Common\Models\Card;
 use Gregoriohc\Moneta\Common\Models\Token;
 use Gregoriohc\Moneta\Moneta;
-use Gregoriohc\Moneta\Tests\Mocking\CaptureRequest;
+use Gregoriohc\Moneta\Tests\Mocking\Messages\CaptureRequest;
 use Gregoriohc\Moneta\Tests\Mocking\FakeGateway;
-use Gregoriohc\Moneta\Tests\Mocking\FakeResponse;
+use Gregoriohc\Moneta\Tests\Mocking\Messages\FakeResponse;
 use RuntimeException;
 
 class CaptureRequestTest extends \PHPUnit\Framework\TestCase
