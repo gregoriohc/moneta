@@ -24,6 +24,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Fake', $gateway->name());
         $this->assertTrue($gateway->supportsCapture());
         $this->assertFalse($gateway->supportsAuthorize());
+        $this->assertFalse($gateway->supportsAcceptNotification());
         $this->assertEquals([
             'test_mode' => true,
             'api_key' => 'qwerty12345',
@@ -89,7 +90,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function fails_calling_non_existing_gateway_method()
+    public function fails_calling_unsupported_gateway_method()
     {
         /** @var FakeGateway $gateway */
         $gateway = Moneta::create(FakeGateway::class, [
@@ -100,5 +101,21 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("Gateway 'FakeGateway' does not support 'authorize' method");
 
         $gateway->authorize();
+    }
+
+    /**
+     * @test
+     */
+    public function fails_calling_non_existing_gateway_method()
+    {
+        /** @var FakeGateway $gateway */
+        $gateway = Moneta::create(FakeGateway::class, [
+            'api_key' => 'qwerty12345',
+        ]);
+
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage("Method 'Gregoriohc\Moneta\Tests\Mocking\FakeGateway::foo' does not exists");
+
+        $gateway->foo();
     }
 }
