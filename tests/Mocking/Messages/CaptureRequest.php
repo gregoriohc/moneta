@@ -13,8 +13,9 @@ class CaptureRequest extends AbstractRequest
     public function parametersValidationRules()
     {
         return array_merge(parent::parametersValidationRules(), [
-            'card' => 'required_without_all:token|is_model:Card|is_valid',
-            'token' => 'required_without_all:card|is_model:Token|is_valid',
+            'card' => 'required_without_all:token,bank_account|is_model:Card|is_valid',
+            'token' => 'required_without_all:card,bank_account|is_model:Token|is_valid',
+            'bank_account' => 'required_without_all:card,token|is_model:BankAccount|is_valid',
         ]);
     }
 

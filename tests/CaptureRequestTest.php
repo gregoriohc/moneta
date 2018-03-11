@@ -3,6 +3,7 @@
 namespace Gregoriohc\Moneta\Tests;
 
 use Gregoriohc\Moneta\Common\Exceptions\InvalidParametersException;
+use Gregoriohc\Moneta\Common\Models\BankAccount;
 use Gregoriohc\Moneta\Common\Models\Card;
 use Gregoriohc\Moneta\Common\Models\Token;
 use Gregoriohc\Moneta\Moneta;
@@ -87,6 +88,43 @@ class CaptureRequestTest extends \PHPUnit\Framework\TestCase
         $responseData = $response->data();
         $this->assertEquals([
             'token' => $token->parametersToArray(),
+            'amount' => 100,
+            'currency' => 'USD',
+        ], $responseData);
+    }
+
+    /**
+     * @test
+     */
+    public function can_capture_amount_with_bank_account()
+    {
+        /** @var FakeGateway $gateway */
+        $gateway = Moneta::create(FakeGateway::class, [
+            'api_key' => 'qwerty12345',
+        ]);
+        $this->assertInstanceOf(FakeGateway::class, $gateway);
+        $this->assertTrue($gateway->supportsCapture());
+
+        $bankAccount = new BankAccount([
+            'full_name' => 'John Doe',
+            'number' => '123456789012',
+        ]);
+
+        /** @var CaptureRequest $request */
+        $request = $gateway->capture([
+            'bank_account' => $bankAccount,
+            'amount' => 100,
+            'currency' => 'USD',
+        ]);
+        $this->assertInstanceOf(CaptureRequest::class, $request);
+
+        /** @var FakeResponse $response */
+        $response = $request->send();
+        $this->assertInstanceOf(FakeResponse::class, $response);
+
+        $responseData = $response->data();
+        $this->assertEquals([
+            'bank_account' => $bankAccount->parametersToArray(),
             'amount' => 100,
             'currency' => 'USD',
         ], $responseData);
