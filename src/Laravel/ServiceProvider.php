@@ -22,9 +22,7 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $configPath = $this->app->make('path.config');
-        $this->publishes([__DIR__.'/../../config/moneta.php' => $configPath . '/moneta.php']);
-
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->publishes([__DIR__.'/../../config/moneta.php' => $configPath . '/moneta.php']);  
     }
 
     /**
