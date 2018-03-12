@@ -90,27 +90,37 @@ class Validator
         "is_model"         => "The :attribute must be a model of type :model.",
     ];
 
+    protected $context;
+
     /**
      * Validator constructor.
      *
      * @param array $parameters
      * @param array $rules
+     * @param mixed $context
      */
-    public function __construct($parameters, $rules)
+    public function __construct($parameters, $rules, $context = null)
     {
+        $this->context = $context;
         $this->validator = $this->getValidator($parameters, $rules);
     }
 
     /**
      * @param array $parameters
      * @param array $rules
+     * @param mixed $context
      * @return static|\Illuminate\Validation\Validator
      */
-    public static function make($parameters, $rules)
+    public static function make($parameters, $rules, $context = null)
     {
-        return new static($parameters, $rules);
+        return new static($parameters, $rules, $context);
     }
 
+    /**
+     * @param array $parameters
+     * @param array $rules
+     * @return \Illuminate\Validation\Validator
+     */
     public function getValidator($parameters, $rules)
     {
         if (!class_exists('\Validator')) {
@@ -127,15 +137,23 @@ class Validator
         return $validator;
     }
 
+    /**
+     * @param \Illuminate\Validation\Validator $validator
+     * @param array $names
+     */
     public function bootValidatorExtensions(&$validator, $names)
     {
+        $context = $this->context;
+
         foreach ($names as $name) {
-            $validator->addExtension($name, function ($attribute, $value, $parameters, $validator) use ($name) {
+            $validator->addExtension($name, function ($attribute, $value, $parameters, $validator) use ($name, $context) {
+                $parameters[] = $context;
                 $method = 'validate' . studly_case($name);
                 return call_user_func_array([static::class, $method], [$attribute, $value, $parameters, $validator]);
             });
 
-            $validator->addReplacer($name, function ($message, $attribute, $rule, $parameters) use ($name) {
+            $validator->addReplacer($name, function ($message, $attribute, $rule, $parameters) use ($name, $context) {
+                $parameters[] = $context;
                 $method = 'replace' . studly_case($name);
                 if (!method_exists(static::class, $method)) {
                     return $message;
@@ -177,12 +195,18 @@ class Validator
      */
     protected static function validateIsModel($attribute, $value, $parameters, $validator)
     {
-        if (!count($parameters)) {
-            $parameters[] = 'AbstractModel';
+        $basePackageNamespace = implode('\\', array_slice(explode('\\', static::class), 0, 2));
+        if (count($parameters) == 1) {
+            array_unshift($parameters, $basePackageNamespace . '\\Common\\Models\\AbstractModel');
         }
-        $model = 'Gregoriohc\\Moneta\\Common\\Models\\' . $parameters[0];
 
-        if (!is_a($value, $model, true)) {
+        $contextClass = get_class($parameters[1]);
+        $baseContextNamespace = implode('\\', array_slice(explode('\\', $contextClass), 0, 2));;
+        if (!strstr($parameters[0], '\\')) {
+            $parameters[0] = $baseContextNamespace . '\\Common\\Models\\' . $parameters[0];
+        }
+
+        if (!is_a($value, $parameters[0], true)) {
             return false;
         }
 
@@ -198,8 +222,8 @@ class Validator
      */
     protected static function replaceIsModel($message, $attribute, $rule, $parameters)
     {
-        if (!count($parameters)) {
-            $parameters[] = 'AbstractModel';
+        if (count($parameters) == 1) {
+            array_unshift($parameters, 'AbstractModel');
         }
 
         return str_replace(':model', $parameters[0], $message);

@@ -46,7 +46,7 @@ trait Parametrizable
     {
         $rules = array_merge($this->parametersValidationRules(), $extraRules);
 
-        $validator = Validator::make($this->allParameters(), $rules);
+        $validator = Validator::make($this->allParameters(), $rules, $this);
 
         if ($validator->fails()) {
             $messages = [];
