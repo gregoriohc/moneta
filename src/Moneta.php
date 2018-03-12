@@ -30,7 +30,7 @@ class Moneta
     public static function factory()
     {
         if (is_null(self::$factory)) {
-            self::$factory = new GatewayFactory;
+            self::$factory = new GatewayFactory(__NAMESPACE__);
         }
 
         return self::$factory;
