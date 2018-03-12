@@ -44,8 +44,8 @@ class Moneta
      * Example:
      *
      * <code>
-     *   // Create a PayPal gateway
-     *   $gateway = Moneta::create('ExpressGateway');
+     *   // Create a Stripe gateway
+     *   $gateway = Moneta::create('Stripe');
      * </code>
      *
      * @param string $method     The factory method to invoke.
