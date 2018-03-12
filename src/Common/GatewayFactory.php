@@ -46,10 +46,11 @@ class GatewayFactory
         }
 
         if (function_exists('config')) {
-            $parameters = config('moneta.gateways.' . $name, []);
+            $configBasePath = snake_case(class_basename($this->contextNamespace));
+            $parameters = config($configBasePath . '.gateways.' . $name, []);
 
             if (!array_key_exists('test_mode', $parameters)) {
-                $parameters = config('moneta.test_mode', true);
+                $parameters = config($configBasePath . '.test_mode', true);
             }
         }
 
