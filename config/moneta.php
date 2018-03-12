@@ -4,13 +4,32 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Variable
+    | Test mode
     |--------------------------------------------------------------------------
     |
-    | Package config variable
+    | Enable or disable test mode
     |
     */
 
-    'key' => 'value',
+    'test_mode' => env('MONETA_TEST_MODE', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gateways parameters
+    |--------------------------------------------------------------------------
+    |
+    | Configuration parameters for each gateway
+    |
+    */
+
+    'gateways' => [
+
+        /*
+        'stripe' => [
+            'api_key' => env('STRIPE_SECRET'),
+        ],
+         */
+
+    ],
 
 ];
