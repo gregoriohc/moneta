@@ -2,7 +2,7 @@
 
 namespace Gregoriohc\Moneta\Common\Models;
 
-use Gregoriohc\Moneta\Support\Helper;
+use Gregoriohc\Protean\Common\Models\AbstractModel;
 
 abstract class PaymentMethod extends AbstractModel
 {

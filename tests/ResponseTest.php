@@ -35,8 +35,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($response->isSuccessful());
         $this->assertFalse($response->isCancelled());
-        $this->assertFalse($response->isRedirect());
-        $this->assertFalse($response->isTransparentRedirect());
 
         $responseData = $response->data();
         $this->assertEquals([

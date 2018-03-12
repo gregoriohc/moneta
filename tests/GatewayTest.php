@@ -2,7 +2,7 @@
 
 namespace Gregoriohc\Moneta\Tests;
 
-use Gregoriohc\Moneta\Common\Exceptions\InvalidParametersException;
+use Gregoriohc\Protean\Common\Exceptions\InvalidParametersException;
 use Gregoriohc\Moneta\Moneta;
 use Gregoriohc\Moneta\Tests\Mocking\FakeGateway;
 

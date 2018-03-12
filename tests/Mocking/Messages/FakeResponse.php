@@ -2,7 +2,7 @@
 
 namespace Gregoriohc\Moneta\Tests\Mocking\Messages;
 
-use Gregoriohc\Moneta\Common\Messages\AbstractResponse;
+use Gregoriohc\Protean\Common\Messages\AbstractResponse;
 
 class FakeResponse extends AbstractResponse
 {

@@ -2,8 +2,8 @@
 
 namespace Gregoriohc\Moneta\Tests\Mocking\Messages;
 
-use Gregoriohc\Moneta\Common\Messages\AbstractRequest;
-use Gregoriohc\Moneta\Common\Messages\ResponseInterface;
+use Gregoriohc\Protean\Common\Messages\AbstractRequest;
+use Gregoriohc\Protean\Common\Messages\ResponseInterface;
 
 class CaptureRequest extends AbstractRequest
 {

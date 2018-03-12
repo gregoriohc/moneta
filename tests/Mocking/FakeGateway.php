@@ -2,10 +2,15 @@
 
 namespace Gregoriohc\Moneta\Tests\Mocking;
 
-use Gregoriohc\Moneta\Common\AbstractGateway;
+use Gregoriohc\Moneta\Common\AbstractPaymentGateway;
+use Gregoriohc\Protean\Common\Messages\RequestInterface;
 use Gregoriohc\Moneta\Tests\Mocking\Messages\FakeRequest;
 
-class FakeGateway extends AbstractGateway
+/**
+ * @method RequestInterface capture($parameters = [])
+ * @method bool supportsCapture()
+ */
+class FakeGateway extends AbstractPaymentGateway
 {
     /**
      * @return array
@@ -39,7 +44,7 @@ class FakeGateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return \Gregoriohc\Moneta\Common\Messages\AbstractRequest
+     * @return \Gregoriohc\Protean\Common\Messages\AbstractRequest
      */
     public function fake($parameters = [])
     {

@@ -2,7 +2,7 @@
 
 namespace Gregoriohc\Moneta\Tests;
 
-use Gregoriohc\Moneta\Common\Exceptions\InvalidParametersException;
+use Gregoriohc\Protean\Common\Exceptions\InvalidParametersException;
 use Gregoriohc\Moneta\Common\Models\BankAccount;
 use Gregoriohc\Moneta\Common\Models\Card;
 use Gregoriohc\Moneta\Common\Models\Token;
@@ -187,6 +187,7 @@ class CaptureRequestTest extends \PHPUnit\Framework\TestCase
             'api_key' => 'qwerty12345',
         ]);
 
+        /** @var CaptureRequest $request */
         $request = $gateway->capture([
             'card' => new Card([
                 'number' => '4111111111111111',
