@@ -22,7 +22,7 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $configPath = $this->app->make('path.config');
-        $this->publishes([__DIR__.'/../../config/moneta.php' => $configPath . '/moneta.php']);  
+        $this->publishes([__DIR__ . '/../../config/moneta.php' => $configPath . '/moneta.php']);
     }
 
     /**
@@ -32,10 +32,12 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../../config/moneta.php', 'moneta');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/moneta.php', 'moneta');
 
         $this->app['moneta'] = $this->app->share(function ($app) {
+            // @codeCoverageIgnoreStart
             return new Moneta();
+            // @codeCoverageIgnoreEnd
         });
     }
 }
